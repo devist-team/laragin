@@ -1,2 +1,2 @@
 # laragin
-multi vendor &amp; multi strategy opinionated login package for laravel
+multi vendor and multi strategy opinionated login package for laravel

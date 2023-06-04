@@ -1,11 +1,13 @@
 <?php
 
-namespace Devist\laragin\Core;
+namespace Devist\Laragin\Core;
 
 class Bootstrap
 {
-    public function routes()
+    public static function routes()
     {
-        app()->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        foreach (config('laragin.strategies') as $strategy) {
+            $strategy;
+        }
     }
 }

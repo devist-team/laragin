@@ -2,10 +2,17 @@
 
 return [
     'strategies' => [
-
+        'otp',
     ],
 
-    'providers' => [
+    'drivers' => [
+        'otp' => [
+            'models'   => [
 
+            ],
+            'channels' => [
+
+            ],
+        ],
     ],
 ];

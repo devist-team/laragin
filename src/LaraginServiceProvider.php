@@ -1,7 +1,8 @@
 <?php
 
-namespace Devist\laragin;
+namespace Devist\Laragin;
 
+use Devist\Laragin\Core\Bootstrap;
 use Illuminate\Support\ServiceProvider;
 
 class LaraginServiceProvider extends ServiceProvider
@@ -11,7 +12,7 @@ class LaraginServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laragin.php', 'laragin');
     }
@@ -24,6 +25,6 @@ class LaraginServiceProvider extends ServiceProvider
             ], 'laragin');
         }
 
-
+        Bootstrap::routes();
     }
 }

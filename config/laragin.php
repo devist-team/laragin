@@ -1,16 +1,19 @@
 <?php
 
 return [
+    'prefix' => 'api/laragin',
+
     'strategies' => [
         'otp',
     ],
 
     'drivers' => [
         'otp' => [
-            'models'   => [
+            'identifier' => 'mobile',
+            'models'     => [
 
             ],
-            'channels' => [
+            'channels'   => [
 
             ],
         ],

@@ -3,6 +3,7 @@
 namespace Devist\Laragin;
 
 use Devist\Laragin\Core\Bootstrap;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LaraginServiceProvider extends ServiceProvider
@@ -25,6 +26,6 @@ class LaraginServiceProvider extends ServiceProvider
             ], 'laragin');
         }
 
-        Bootstrap::routes();
+        Route::prefix(config('laragin.prefix'))->group(Bootstrap::routes());
     }
 }

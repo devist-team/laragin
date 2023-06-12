@@ -11,8 +11,9 @@ class OTP
     {
         Route::prefix('{guard}')->group(function () {
             Route::prefix('otp')->group(function () {
-                Route::get('me', [OTPController::class, 'index']);
+                Route::middleware('auth:sanctum')->get('me', [OTPController::class, 'index']);
                 Route::post('login', [OTPController::class, 'login']);
+                Route::post('send', [OTPController::class, 'sendOtp']);
             });
         });
     }

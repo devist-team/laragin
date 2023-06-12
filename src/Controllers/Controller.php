@@ -28,6 +28,7 @@ class Controller extends BaseController
 
     public function index()
     {
-        return Auth::user();
+        $user = Auth::user();
+        return response()->json(['user' => $user], 200);
     }
 }

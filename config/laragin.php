@@ -9,6 +9,8 @@ return [
 
     'drivers' => [
         'otp' => [
+            'lifetime'   => 2 * 60,
+            'digits'     => 4,
             'identifier' => 'mobile',
             'models'     => [
 

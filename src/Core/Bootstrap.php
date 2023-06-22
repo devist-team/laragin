@@ -15,9 +15,11 @@ class Bootstrap
     public static function routes(): Closure
     {
         return function () {
-            foreach (config('laragin.strategies') as $strategy) {
-                self::resolve($strategy)::routes();
-            }
+            Route::prefix('{guard}')->group(function () {
+                foreach (config('laragin.strategies') as $strategy) {
+                    self::resolve($strategy)::routes();
+                }
+            });
         };
     }
 

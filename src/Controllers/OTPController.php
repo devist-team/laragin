@@ -30,13 +30,13 @@ class OTPController extends Controller
             throw ValidationException::withMessages([$this->identifier => 'The User is not existed']);
         }
 
-        $cachedOtp = Cache::get($user->id.'_otp');
+        $cachedOtp = Cache::Driver(config('laragin.cache'))->get($user->id.'_otp');
 
         if ( ! $cachedOtp || $cachedOtp != $request->input('otp')) {
             throw ValidationException::withMessages(['otp' => 'Invalid otp']);
         }
 
-        Cache::forget($user->id.'_otp');
+        Cache::Driver(config('laragin.cache'))->forget($user->id.'_otp');
 
         $token = $user->createToken('laragin')->plainTextToken;
 
@@ -62,7 +62,7 @@ class OTPController extends Controller
             10 ** config('laragin.drivers.otp.digits') - 1
         );
 
-        Cache::put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
+        Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
 
         return response()->json(['message' => $otp.' OTP has been sent to your email'], 200);
     }

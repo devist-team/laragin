@@ -7,6 +7,8 @@ return [
         'otp',
     ],
 
+    'cache' => env('CACHE_DRIVER', 'file'),
+
     'drivers' => [
         'otp' => [
             'lifetime'   => 2 * 60,

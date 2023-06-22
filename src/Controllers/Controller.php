@@ -20,15 +20,20 @@ class Controller extends BaseController
     public mixed $authenticatable;
     public string $identifier;
 
+    protected string $driver;
+
     public function __construct(Request $request)
     {
-        $this->authenticatable =  config('auth.providers.'.$request->route('guard').'.model');
-        $this->identifier = config('laragin.drivers.otp.identifier');
+        $guard                 = $request->route('guard');
+        $model                 = config('auth.guards.'.$guard.'.provider');
+        $this->authenticatable = config('auth.providers.'.$model.'.model');
+        $this->identifier      = config('laragin.drivers.'.$this->driver.'.identifier');
     }
 
     public function index()
     {
         $user = Auth::user();
+
         return response()->json(['user' => $user], 200);
     }
 }

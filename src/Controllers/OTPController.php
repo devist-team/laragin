@@ -9,6 +9,9 @@ use Illuminate\Validation\ValidationException;
 
 class OTPController extends Controller
 {
+
+    protected string $driver = 'otp';
+
     /**
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -35,7 +38,7 @@ class OTPController extends Controller
 
         Cache::forget($user->id.'_otp');
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        $token = $user->createToken('laragin')->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }
@@ -61,6 +64,6 @@ class OTPController extends Controller
 
         Cache::put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
 
-        return response()->json(['message' => $otp.' OTP has been sent to your email'.$user->id], 200);
+        return response()->json(['message' => $otp.' OTP has been sent to your email'], 200);
     }
 }

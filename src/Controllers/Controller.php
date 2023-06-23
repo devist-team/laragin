@@ -27,7 +27,10 @@ class Controller extends BaseController
         $guard                 = $request->route('guard');
         $model                 = config('auth.guards.'.$guard.'.provider');
         $this->authenticatable = config('auth.providers.'.$model.'.model');
-        $this->identifier      = config('laragin.drivers.'.$this->driver.'.identifier');
+
+        if (isset($this->driver)) {
+            $this->identifier = config('laragin.drivers.'.$this->driver.'.identifier');
+        }
     }
 
     public function index()
@@ -35,5 +38,12 @@ class Controller extends BaseController
         $user = Auth::user();
 
         return response()->json(['user' => $user], 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['user' => $request->user()], 200);
     }
 }

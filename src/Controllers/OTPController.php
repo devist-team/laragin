@@ -2,15 +2,42 @@
 
 namespace Devist\Laragin\Controllers;
 
+use Devist\Laragin\Notifications\OTPNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
 class OTPController extends Controller
 {
 
     protected string $driver = 'otp';
+
+    public function sendOtp(Request $request)
+    {
+        $attributes = $request->validate([
+            $this->identifier => ['required', 'string', 'max:20'],
+        ]);
+
+        $user = Auth::guard()->getProvider()->retrieveByCredentials([
+            $this->identifier => $attributes[$this->identifier],
+        ]);
+
+        if ( ! $user) {
+            $user = $this->authenticatable::create($attributes);
+        }
+
+        $otp = mt_rand(
+            10 ** (config('laragin.drivers.otp.digits') - 1),
+            10 ** config('laragin.drivers.otp.digits') - 1
+        );
+
+        Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
+        Notification::send($user, new OTPNotification($otp, 'mail'));
+
+        return response()->json(['message' => $otp.' OTP has been sent to your email'], 200);
+    }
 
     /**
      * @throws \Illuminate\Validation\ValidationException
@@ -41,29 +68,5 @@ class OTPController extends Controller
         $token = $user->createToken('laragin')->plainTextToken;
 
         return response()->json(['token' => $token], 200);
-    }
-
-    public function sendOtp(Request $request)
-    {
-        $attributes = $request->validate([
-            $this->identifier => ['required', 'string', 'max:20'],
-        ]);
-
-        $user = Auth::guard()->getProvider()->retrieveByCredentials([
-            $this->identifier => $attributes[$this->identifier],
-        ]);
-
-        if ( ! $user) {
-            $user = $this->authenticatable::create($attributes);
-        }
-
-        $otp = mt_rand(
-            10 ** (config('laragin.drivers.otp.digits') - 1),
-            10 ** config('laragin.drivers.otp.digits') - 1
-        );
-
-        Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
-
-        return response()->json(['message' => $otp.' OTP has been sent to your email'], 200);
     }
 }

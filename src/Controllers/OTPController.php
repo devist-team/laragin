@@ -36,7 +36,13 @@ class OTPController extends Controller
         Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
         Notification::send($user, new OTPNotification($otp, 'mail'));
 
-        return response()->json(['message' => $otp.' OTP has been sent to your email'], 200);
+        $data = ['message' => ' OTP has been sent to your email'];
+
+        if (config('laragin.expose')) {
+            $data['otp'] = $otp;
+        }
+
+        return response()->json($data, 200);
     }
 
     /**

@@ -23,7 +23,11 @@ class LaraginServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/laragin.php' => config_path('laragin.php'),
-            ], 'laragin');
+            ], 'laragin-config');
+
+            $this->publishes([
+                __DIR__.'/../resources/views/otp/email.blade.php' => resource_path('views/laragin/otp/email.blade.php'),
+            ], 'laragin-templates');
         }
 
         Route::prefix(config('laragin.prefix'))->group(Bootstrap::routes());

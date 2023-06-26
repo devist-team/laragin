@@ -18,9 +18,9 @@ class Bootstrap
     public static function routes(): Closure
     {
         return function () {
-            self::ِdefaultRoutes();
-
             Route::prefix('{guard}')->group(function () {
+                self::ِdefaultRoutes();
+
                 foreach (config('laragin.strategies') as $strategy) {
                     self::resolve($strategy)::routes();
                 }
@@ -35,7 +35,7 @@ class Bootstrap
 
     private static function ِdefaultRoutes(): void
     {
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware('autoguard')->group(function () {
             Route::get('me', [Controller::class, 'index']);
             Route::get('logout', [Controller::class, 'delete']);
         });

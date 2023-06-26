@@ -44,7 +44,7 @@ class PasswordController extends Controller
     {
         $rules['new_password'] = ['required', 'string', Password::defaults()];
 
-        if (config('laragin.password.restricted_update')) {
+        if (config('laragin.drivers.password.restricted_update')) {
             $rules['current_password'] = ['required', 'string', 'current_password:'.$this->guard];
         }
 

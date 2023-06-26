@@ -3,6 +3,8 @@
 namespace Devist\Laragin;
 
 use Devist\Laragin\Core\Bootstrap;
+use Devist\Laragin\Middlewares\Authenticate;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -30,6 +32,9 @@ class LaraginServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/views/otp/email.blade.php' => resource_path('views/laragin/otp/email.blade.php'),
             ], 'laragin-templates');
         }
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('autoguard', Authenticate::class);
 
         Route::prefix(config('laragin.prefix'))->group(Bootstrap::routes());
 

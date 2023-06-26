@@ -12,7 +12,7 @@ class Password extends Strategy
     {
         Route::prefix('password')->group(function () {
             Route::post('login', [PasswordController::class, 'login']);
-            Route::middleware('auth')->post('update', [PasswordController::class, 'update']);
+            Route::middleware('autoguard')->post('update', [PasswordController::class, 'update']);
         });
     }
 }

@@ -5,6 +5,7 @@ return [
 
     'strategies' => [
         'otp',
+        'password',
     ],
 
     'cache' => env('CACHE_DRIVER', 'file'),
@@ -12,7 +13,7 @@ return [
     'expose' => env('APP_DEBUG', 'false'),
 
     'drivers' => [
-        'otp' => [
+        'otp'      => [
             'lifetime'   => 2 * 60,
             'digits'     => 4,
             'identifier' => 'mobile',
@@ -22,6 +23,9 @@ return [
             'channels'   => [
 
             ],
+        ],
+        'password' => [
+            'identifier' => 'mobile',
         ],
     ],
 ];

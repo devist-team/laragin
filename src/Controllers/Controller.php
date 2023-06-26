@@ -19,13 +19,14 @@ class Controller extends BaseController
      */
     public mixed $authenticatable;
     public string $identifier;
+    public string|null $guard;
 
     protected string $driver;
 
     public function __construct(Request $request)
     {
-        $guard                 = $request->route('guard');
-        $model                 = config('auth.guards.'.$guard.'.provider');
+        $this->guard           = $request->route('guard');
+        $model                 = config('auth.guards.'.$this->guard.'.provider');
         $this->authenticatable = config('auth.providers.'.$model.'.model');
 
         if (isset($this->driver)) {

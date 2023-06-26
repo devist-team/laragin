@@ -72,13 +72,13 @@ class OTPController extends Controller
         ]);
 
         if ( ! $user) {
-            throw ValidationException::withMessages([$this->identifier => 'The User is not existed']);
+            throw ValidationException::withMessages([$this->identifier => trans('auth.failed')]);
         }
 
         $cachedOtp = Cache::Driver(config('laragin.cache'))->get($user->id.'_otp');
 
         if ( ! $cachedOtp || $cachedOtp != $request->input('otp')) {
-            throw ValidationException::withMessages(['otp' => 'Invalid otp']);
+            throw ValidationException::withMessages(['otp' => trans('auth.failed')]);
         }
 
         Cache::Driver(config('laragin.cache'))->forget($user->id.'_otp');

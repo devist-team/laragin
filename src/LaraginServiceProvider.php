@@ -5,6 +5,7 @@ namespace Devist\Laragin;
 use Devist\Laragin\Core\Bootstrap;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class LaraginServiceProvider extends ServiceProvider
 {
@@ -31,5 +32,13 @@ class LaraginServiceProvider extends ServiceProvider
         }
 
         Route::prefix(config('laragin.prefix'))->group(Bootstrap::routes());
+
+        Password::defaults(function () {
+            $rule = Password::min(8);
+
+            return $this->app->isProduction()
+                ? $rule->mixedCase()->uncompromised()
+                : $rule;
+        });
     }
 }

@@ -25,7 +25,8 @@ return [
             ],
         ],
         'password' => [
-            'identifier' => 'mobile',
+            'identifier'        => 'mobile',
+            'restricted_update' => true,
         ],
     ],
 ];

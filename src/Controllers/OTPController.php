@@ -14,10 +14,14 @@ class OTPController extends Controller
 
     protected string $driver = 'otp';
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function sendOtp(Request $request)
     {
         $attributes = $request->validate([
             $this->identifier => ['required', 'string', 'max:20'],
+            'channel'         => ['required', 'string'],
         ]);
 
         $user = Auth::guard()->getProvider()->retrieveByCredentials([
@@ -26,6 +30,8 @@ class OTPController extends Controller
 
         if ( ! $user) {
             $user = $this->authenticatable::create($attributes);
+        } elseif (Cache::Driver(config('laragin.cache'))->has($user->id.'_otp')) {
+            return $this->otpResponse(Cache::Driver(config('laragin.cache'))->get($user->id.'_otp'));
         }
 
         $otp = mt_rand(
@@ -34,8 +40,14 @@ class OTPController extends Controller
         );
 
         Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
-        Notification::send($user, new OTPNotification($otp, 'mail'));
+        Notification::send($user, new OTPNotification($otp, $attributes['channel']));
 
+
+        return $this->otpResponse($otp);
+    }
+
+    private function otpResponse(string $otp)
+    {
         $data = ['message' => ' OTP has been sent to your email'];
 
         if (config('laragin.expose')) {

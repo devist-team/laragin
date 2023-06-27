@@ -14,6 +14,20 @@ class OTPController extends Controller
 
     protected string $driver = 'otp';
 
+    public function check(Request $request)
+    {
+        $attributes = $request->validate([
+            $this->identifier => ['required', 'string', 'max:20'],
+        ]);
+
+        $user = Auth::guard($this->guard)->getProvider()->retrieveByCredentials([
+            $this->identifier => $attributes[$this->identifier],
+        ]);
+
+        return response()->json(['is_registered' => boolval($user)], 200);
+    }
+
+
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
@@ -24,7 +38,7 @@ class OTPController extends Controller
             'channel'         => ['sometimes', 'string'],
         ]);
 
-        $user = Auth::guard()->getProvider()->retrieveByCredentials([
+        $user = Auth::guard($this->guard)->getProvider()->retrieveByCredentials([
             $this->identifier => $attributes[$this->identifier],
         ]);
 

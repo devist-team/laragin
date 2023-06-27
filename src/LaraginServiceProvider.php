@@ -39,11 +39,10 @@ class LaraginServiceProvider extends ServiceProvider
         Route::prefix(config('laragin.prefix'))->group(Bootstrap::routes());
 
         Password::defaults(function () {
-            $rule = Password::min(8);
 
-            return $this->app->isProduction()
-                ? $rule->mixedCase()->uncompromised()
-                : $rule;
+            return Password::min(8)->when($this->app->isProduction(), function ($password) {
+                return $password->mixedCase()->uncompromised();
+            });
         });
     }
 }

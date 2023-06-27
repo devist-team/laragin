@@ -21,7 +21,7 @@ class OTPController extends Controller
     {
         $attributes = $request->validate([
             $this->identifier => ['required', 'string', 'max:20'],
-            'channel'         => ['required', 'string'],
+            'channel'         => ['sometimes', 'string'],
         ]);
 
         $user = Auth::guard()->getProvider()->retrieveByCredentials([
@@ -40,7 +40,7 @@ class OTPController extends Controller
         );
 
         Cache::Driver(config('laragin.cache'))->put($user->id.'_otp', $otp, config('laragin.drivers.otp.expire_in'));
-        Notification::send($user, new OTPNotification($otp, $attributes['channel']));
+        Notification::send($user, new OTPNotification($otp, $attributes['channel'] ?? ''));
 
 
         return $this->otpResponse($otp);

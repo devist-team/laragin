@@ -28,10 +28,7 @@ class PasswordController extends Controller
             'password'        => ['required', 'string'],
         ]);
 
-        $loggedIn = Auth::guard($this->guard)->once($attributes);
-
-
-        if ( ! $loggedIn) {
+        if ( ! Auth::guard($this->guard)->once($attributes)) {
             throw ValidationException::withMessages([$this->identifier => trans('auth.failed')]);
         }
 
@@ -44,7 +41,7 @@ class PasswordController extends Controller
     {
         $rules['new_password'] = ['required', 'string', Password::defaults()];
         if (
-            config('laragin.drivers.password.restricted_update') and
+            config('laragin.drivers.password.restricted_update') &&
             ! is_null(Auth::user()->getAuthPassword())
         ) {
             $rules['current_password'] = ['required', 'string', 'current_password:'.$this->guard];

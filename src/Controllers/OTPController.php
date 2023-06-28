@@ -24,12 +24,13 @@ class OTPController extends Controller
             $this->identifier => $attributes[$this->identifier],
         ]);
 
-        return response()->json(['is_registered' => boolval($user)], 200);
+        return response()->json(['is_registered' => (bool)$user], 200);
     }
 
 
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
      */
     public function sendOtp(Request $request)
     {
@@ -48,7 +49,7 @@ class OTPController extends Controller
             return $this->otpResponse(Cache::Driver(config('laragin.cache'))->get($user->id.'_otp'));
         }
 
-        $otp = mt_rand(
+        $otp = random_int(
             10 ** (config('laragin.drivers.otp.digits') - 1),
             10 ** config('laragin.drivers.otp.digits') - 1
         );
@@ -91,7 +92,7 @@ class OTPController extends Controller
 
         $cachedOtp = Cache::Driver(config('laragin.cache'))->get($user->id.'_otp');
 
-        if ( ! $cachedOtp || $cachedOtp != $request->input('otp')) {
+        if ( ! $cachedOtp || $cachedOtp !== $request->input('otp')) {
             throw ValidationException::withMessages(['otp' => trans('auth.failed')]);
         }
 

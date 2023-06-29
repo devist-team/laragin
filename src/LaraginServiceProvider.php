@@ -2,7 +2,7 @@
 
 namespace Devist\Laragin;
 
-use Devist\Laragin\Core\Bootstrap;
+use Devist\Laragin\Services\Bootstrap;
 use Devist\Laragin\Middlewares\Authenticate;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;

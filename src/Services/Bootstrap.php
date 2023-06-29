@@ -1,6 +1,6 @@
 <?php
 
-namespace Devist\Laragin\Core;
+namespace Devist\Laragin\Services;
 
 use Closure;
 use Devist\Laragin\Controllers\Controller;

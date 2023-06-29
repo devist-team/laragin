@@ -2,16 +2,12 @@
 
 namespace Devist\Laragin\Controllers;
 
-use Devist\Laragin\Notifications\OTPNotification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use Devist\Laragin\Services\Agent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-
-use function Symfony\Component\Translation\t;
 
 class PasswordController extends Controller
 {
@@ -32,7 +28,7 @@ class PasswordController extends Controller
             throw ValidationException::withMessages([$this->identifier => trans('auth.failed')]);
         }
 
-        $token = Auth::guard($this->guard)->user()->createToken('laragin')->plainTextToken;
+        $token = Auth::guard($this->guard)->user()->createToken(Agent::parse())->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }
@@ -41,7 +37,8 @@ class PasswordController extends Controller
     {
         $rules['new_password'] = ['required', 'string', Password::defaults()];
         if (
-            config('laragin.drivers.password.restricted_update') &&
+            config('laragin.drivers.password.restricted_update')
+            &&
             ! is_null(Auth::user()->getAuthPassword())
         ) {
             $rules['current_password'] = ['required', 'string', 'current_password:'.$this->guard];

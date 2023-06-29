@@ -2,9 +2,8 @@
 
 namespace Devist\Laragin\Controllers;
 
-use Devist\Laragin\Notifications\OTPNotification;
+use Devist\Laragin\Services\Agent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -28,12 +27,10 @@ class RegisterController extends Controller
         $data['user'] = $user;
 
         if (config('laragin.drivers.register.login')) {
-            $data['token'] = $user->createToken('laragin')->plainTextToken;
+            $data['token'] = $user->createToken(Agent::parse())->plainTextToken;
         }
 
         return response()->json($data, 200);
     }
-
-
 
 }

@@ -3,9 +3,10 @@
 namespace Devist\Laragin\Controllers;
 
 use Devist\Laragin\Notifications\OTPNotification;
+use Devist\Laragin\Services\Agent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
@@ -98,7 +99,7 @@ class OTPController extends Controller
 
         Cache::Driver(config('laragin.cache'))->forget($user->id.'_otp');
 
-        $token = $user->createToken('laragin')->plainTextToken;
+        $token = $user->createToken(Agent::parse())->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }

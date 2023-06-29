@@ -6,12 +6,14 @@ use Closure;
 use Devist\Laragin\Controllers\Controller;
 use Devist\Laragin\Strategies\OTP;
 use Devist\Laragin\Strategies\Password;
+use Devist\Laragin\Strategies\Register;
 use Illuminate\Support\Facades\Route;
 
 class Bootstrap
 {
     private static array $strategies = [
         'otp'      => OTP::class,
+        'register' => Register::class,
         'password' => Password::class,
     ];
 

@@ -6,6 +6,7 @@ return [
     'strategies' => [
         'otp',
         'password',
+        'register',
     ],
 
     'cache' => env('CACHE_DRIVER', 'file'),
@@ -21,12 +22,20 @@ return [
 
             ],
             'channels'   => [
-
+                'email',
             ],
         ],
         'password' => [
             'identifier'        => 'mobile',
             'restricted_update' => false,
+        ],
+        'register' => [
+            'identifier' => 'mobile',
+
+            'login'    => true,
+            'channels' => [
+
+            ],
         ],
     ],
 ];

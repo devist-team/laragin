@@ -39,7 +39,8 @@ class Bootstrap
     {
         Route::middleware('autoguard')->group(function () {
             Route::get('me', [Controller::class, 'index']);
-            Route::get('logout', [Controller::class, 'delete']);
+            Route::delete('token/{token}/logout', [Controller::class, 'deleteToken']);
+            Route::delete('logout', [Controller::class, 'delete']);
         });
     }
 }

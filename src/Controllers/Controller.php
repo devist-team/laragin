@@ -35,9 +35,27 @@ class Controller extends BaseController
 
     public function index()
     {
+        $tokens = Auth::user()->tokens()->get();
+
+        return response()->json(['tokens' => $tokens], 200);
+    }
+
+    public function show()
+    {
         $user = Auth::user();
 
         return response()->json(['user' => $user], 200);
+    }
+
+    public function deleteToken(Request $request)
+    {
+        $token = $request->user()->tokens()->find(['id' => $request->route('token')])->first();
+
+        abort_if();
+
+        $token->delete();
+
+        return response()->json(['user' => $request->user()], 200);
     }
 
     public function delete(Request $request)
